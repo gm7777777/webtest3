@@ -36,4 +36,9 @@ public final class ContextBeanHelper {
         }
         return (T) CTX_BEAN_MAP.get(cls);
     }
+
+    public static <T> T addBean(Class<?> cls,T t){
+        return (T)CTX_BEAN_MAP.put(cls,t);
+    }
+
 }

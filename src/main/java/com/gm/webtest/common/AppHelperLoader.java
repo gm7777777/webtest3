@@ -11,6 +11,7 @@ public final class AppHelperLoader {
         Class<?>[] classList = {
                 ClassHelper.class,
                 ContextBeanHelper.class,
+                //添加aophelper但是要在IOC之前这样ioc才能获取到
                 IOCHelper.class,
                 ContextBeanHelper.class
         };

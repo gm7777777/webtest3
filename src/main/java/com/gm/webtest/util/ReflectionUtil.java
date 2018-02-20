@@ -48,7 +48,7 @@ public final class ReflectionUtil {
         return result;
     }
 
-    public static void setFiled(Object obj, Field field, Object value){
+    public static void setField(Object obj, Field field, Object value){
 
         try {
             field.setAccessible(true);

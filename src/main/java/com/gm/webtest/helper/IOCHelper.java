@@ -2,13 +2,15 @@ package com.gm.webtest.helper;
 
 import com.gm.webtest.annotation.Inject;
 import com.gm.webtest.util.ReflectionUtil;
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.lang.reflect.Field;
 import java.util.Map;
 
+/**
+ * 注入
+ */
 public final class IOCHelper {
     static{
         Map<Class<?>,Object> beanMap = ContextBeanHelper.getCtxBeanMap();
@@ -23,7 +25,7 @@ public final class IOCHelper {
                             Class<?> fieldclazz = fd.getType();
                             Object fdinstance = beanMap.get(fieldclazz);
                             if(fdinstance!=null){
-                                ReflectionUtil.setFiled(instance,fd,fdinstance);
+                                ReflectionUtil.setField(instance,fd,fdinstance);
                             }
                         }
                     }
