@@ -12,4 +12,5 @@ public interface ConfigConstant {
     public static String BASE_PACKAGE = "webtest.framework.app.basepackage";
     public static String JSP_PATH= "webtest.framework.app.jsppath";
     public static String ASSET_PATH= "webtest.framework.app.assetpath";
+    public static String UPLOAD_LIMIT= "webtest.framework.app.uploadlimit";
 }
