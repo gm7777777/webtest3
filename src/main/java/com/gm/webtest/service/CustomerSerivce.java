@@ -4,6 +4,7 @@ import com.gm.webtest.annotation.Service;
 import com.gm.webtest.annotation.Transcation;
 import com.gm.webtest.common.bean.FileParam;
 import com.gm.webtest.helper.DBHelper;
+import com.gm.webtest.helper.UploadFileHelper;
 import com.gm.webtest.model.Customer;
 import com.gm.webtest.util.ConnectionUtil;
 import com.gm.webtest.util.PropsUtil;
@@ -71,7 +72,7 @@ public class CustomerSerivce {
     public boolean createCustomer(Map<String,Object> fieldMap,FileParam fileParam){
         boolean result = DBHelper.insertEntity(Customer.class,fieldMap);
         if(result){
-            UploadHelper.uploadFile("/tmp/upload/",fileParam);
+            UploadFileHelper.uploadFile("/tmp/upload/",fileParam);
         }
         return result;
     }

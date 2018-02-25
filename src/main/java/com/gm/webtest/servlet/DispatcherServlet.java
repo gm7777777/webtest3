@@ -25,7 +25,7 @@ import java.io.PrintWriter;
 import java.lang.reflect.Method;
 import java.util.Map;
 
-@WebServlet(urlPatterns = "/*", loadOnStartup = 0)
+@WebServlet(urlPatterns = "/*", loadOnStartup = 1)
 public class DispatcherServlet extends HttpServlet {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DispatcherServlet.class);
@@ -39,11 +39,12 @@ public class DispatcherServlet extends HttpServlet {
 
         ServletRegistration jspServlet = servletContext.getServletRegistration("jsp");
         jspServlet.addMapping(ConfigHelper.getJspPath() + "*");
-
         ServletRegistration defaultServlet = servletContext.getServletRegistration("default");
         defaultServlet.addMapping(ConfigHelper.getAssetPath() + "*");
         //添加上传文件初始化
         UploadFileHelper.init(servletContext);
+
+
     }
 
 //    优化前
@@ -119,41 +120,47 @@ public class DispatcherServlet extends HttpServlet {
 
     @Override
     public void service(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        String requestMethod = request.getMethod().toLowerCase();
-        String requestPath = request.getPathInfo();
-        if(requestPath.equals("/favicon.ico")){
-            return;
-        }
-        Handler handler = ControllerHelper.getHandler(requestMethod,requestPath);
 
-        if(handler !=null) {
-            Class<?> controllerClazz = handler.getControllerClazz();
-            Object objBean = ContextBeanHelper.getBean(controllerClazz);
-            RequestParam param = null;
-            //判断是否文件请求类型
-            try {
-                if (UploadFileHelper.isMultipart(request)) {
-                    param = UploadFileHelper.createParam(request);
-                } else {
-                    param = RequestHelper.createParam(request);
+        ServletHelper.init(request,response);
+        try {
+            String requestMethod = request.getMethod().toLowerCase();
+            String requestPath = request.getPathInfo();
+            if(requestPath.equals("/favicon.ico")){
+                return;
+            }
+            Handler handler = ControllerHelper.getHandler(requestMethod,requestPath);
+
+            if(handler !=null) {
+                Class<?> controllerClazz = handler.getControllerClazz();
+                Object objBean = ContextBeanHelper.getBean(controllerClazz);
+                RequestParam param = null;
+                //判断是否文件请求类型
+                try {
+                    if (UploadFileHelper.isMultipart(request)) {
+                        param = UploadFileHelper.createParam(request);
+                    } else {
+                        param = RequestHelper.createParam(request);
+                    }
+                } catch (IOException e) {
+                    LOGGER.error("create Action Param failure", e);
                 }
-            } catch (IOException e) {
-                LOGGER.error("create Action Param failure", e);
-            }
 
-            Object result;
-            Method actionMethod = handler.getActionMethod();
-            if (param.isEmpty()) {
-                result = ReflectionUtil.invokeMethod(objBean,actionMethod);
-            }else{
-                result = ReflectionUtil.invokeMethod(objBean,actionMethod,param);
-            }
+                Object result;
+                Method actionMethod = handler.getActionMethod();
+                if (param.isEmpty()) {
+                    result = ReflectionUtil.invokeMethod(objBean,actionMethod);
+                }else{
+                    result = ReflectionUtil.invokeMethod(objBean,actionMethod,param);
+                }
 
-            if(result instanceof View){
-                handleViewResult((View) result,request,response);
-            }else if(result instanceof  Data){
-                handleDataResult((Data) result,response);
+                if(result instanceof View){
+                    handleViewResult((View) result,request,response);
+                }else if(result instanceof  Data){
+                    handleDataResult((Data) result,response);
+                }
             }
+        } finally {
+            ServletHelper.destroy();
         }
     }
 

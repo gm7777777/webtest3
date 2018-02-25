@@ -15,6 +15,42 @@
 
 
     <dependencies>
+        <!-- Spring -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>5.0.3.RELEASE</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <version>5.0.3.RELEASE</version>
+        </dependency>
+        <!-- CXF -->
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-frontend-jaxws</artifactId>
+            <version>3.2.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-transports-http-jetty</artifactId>
+            <version>3.2.2</version>
+        </dependency>
+
+        <!-- Shiro Web-->
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-web</artifactId>
+            <version>1.4.0</version>
+        </dependency>
+        <!-- Shiro-->
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-core</artifactId>
+            <version>1.4.0</version>
+        </dependency>
 
         <!-- fileuploadplugin-->
         <dependency>
@@ -79,7 +115,7 @@
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
-            <version>3.1.0</version>
+            <version>4.0.0</version>
             <scope>provided</scope>
         </dependency>
         <!-- JSP -->
@@ -135,6 +171,7 @@
                     <failOnMissingWebXml>false</failOnMissingWebXml>
                 </configuration>
             </plugin>
+
             <plugin>
                 <groupId>org.apache.tomcat.maven</groupId>
                 <artifactId>tomcat7-maven-plugin</artifactId>
@@ -146,10 +183,53 @@
                     <update>true</update>
                 </configuration>
             </plugin>
+           <plugin>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat8-maven-plugin</artifactId>
+                <version>3.0-r1655215</version>
+                <configuration>
+                    <path>/${project.artifactId}</path>
+                    <server>tomcat8</server>
+                    <charset>utf8</charset>
+                    <update>true</update>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-maven-plugin</artifactId>
+                <version>9.4.5.v20170502</version>
+                <configuration>
+                    <scanIntervalSeconds>10</scanIntervalSeconds>
+                    <httpConnector>
+                        <port>8080</port>
+                    </httpConnector>
+                    <webApp>
+                        <contextPath>/${project.artifactId}</contextPath>
+                    </webApp>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
-
+    <pluginRepositories>
+        <pluginRepository>
+            <id>alfresco-public</id>
+            <url>https://artifacts.alfresco.com/nexus/content/groups/public</url>
+        </pluginRepository>
+        <pluginRepository>
+            <id>alfresco-public-snapshots</id>
+            <url>https://artifacts.alfresco.com/nexus/content/groups/public-snapshots</url>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>daily</updatePolicy>
+            </snapshots>
+        </pluginRepository>
+        <pluginRepository>
+            <id>beardedgeeks-releases</id>
+            <url>http://beardedgeeks.googlecode.com/svn/repository/releases</url>
+        </pluginRepository>
+    </pluginRepositories>
 
 
 </project>
