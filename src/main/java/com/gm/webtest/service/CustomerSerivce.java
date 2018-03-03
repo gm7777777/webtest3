@@ -62,6 +62,12 @@ public class CustomerSerivce {
         return DBHelper.queryEntityList(Customer.class,sql,null);
     }
 
+    @Transcation
+    public Customer getCustomerById(String id){
+        String sql = "SELECT * FROM customer where id = ?";
+        return DBHelper.queryEntityList(Customer.class,sql,id).get(0);
+    }
+
 
     @Transcation
     public boolean addCustomer(Map<String,Object> fieldMap){

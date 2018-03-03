@@ -7,7 +7,7 @@ import java.util.Properties;
 
 public final class ConfigHelper {
 
-    private static final Properties LOCAL_PROPS
+    public static final Properties LOCAL_PROPS
             = PropsUtil.loadProps(ConfigConstant.CONFIG_FILE);
 
     public static String getJdbcDriver(){
